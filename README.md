@@ -72,5 +72,9 @@ ansible_winrm_server_cert_validation=ignore
 ```ansible-playbook playbook.yml```
 - I remote into the Windows server and see that the server installed Windows Updates...Success!
 
+- Next I create a new directory in this repo called "win_hostname"
+- I switch into this directory and I create a playbook.yml
+- This playbook.yml file will rename the host since I'm planning on making it a Domain Controler
+
 
 
