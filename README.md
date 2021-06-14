@@ -32,5 +32,26 @@ powershell.exe -ExecutionPolicy ByPass -File $file
 
 ```winrm enumerate winrm/config/Listener```
 
+### Checking if Ansible Controller can Connect to Windows Host
+- On Linux box, open Terminal
+- Create directory to store our Ansible inventory file
+
+```mkdir /etc/ansible```
+- Create hosts file to store inventory
+
+```sudo nano /etc/ansible/hosts```
+
+- In the above file you will input the following:
+```[windows]
+{public IP address of Windows host goes here}
+
+[windows:vars]
+ansible_user={local admin user of Windows host goes here }
+ansible_password={local admin password of Windows host goes here}
+ansible_connection=winrm
+ansible_port=5986
+ansible_winrm_transport=ntlm
+ansible_winrm_server_cert_validation=ignore```
+
 
 
