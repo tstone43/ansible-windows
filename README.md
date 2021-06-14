@@ -42,7 +42,8 @@ powershell.exe -ExecutionPolicy ByPass -File $file
 ```sudo nano /etc/ansible/hosts```
 
 - In the above file you will input the following:
-```[windows]
+```
+[windows]
 {public IP address of Windows host goes here}
 
 [windows:vars]
@@ -60,7 +61,9 @@ ansible_winrm_server_cert_validation=ignore
 
 ### Cloning this Repo to my Linux Host
 - I want to clone this repo now to my Linux host, so I can start building some Ansible playbooks for Windows
-- 
+- In Linux terminal run the following.  I would of course recommend using your own Git repository, so you can make changes easily.
+
+```git clone https://github.com/tstone43/ansible-windows.git```
 
 
 
