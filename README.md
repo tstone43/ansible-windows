@@ -51,7 +51,11 @@ ansible_password={local admin password of Windows host goes here}
 ansible_connection=winrm
 ansible_port=5986
 ansible_winrm_transport=ntlm
-ansible_winrm_server_cert_validation=ignore```
+ansible_winrm_server_cert_validation=ignore
+```
+- Run win_ping now to make sure you Ansible can connect to your Windows host
+```ansible windows -m win_ping```
+
 
 
 
