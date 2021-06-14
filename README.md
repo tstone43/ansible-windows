@@ -15,4 +15,22 @@
   - Create a small data disk on the VM
   - Configure RDP network security group after VM creation to allow just your Public IP
 
+### Installing PyWinRM on Mac (Ansible controller)
+- This module is required to allow Ansible to use communicate with Windows over WinRM
+- pip install "pywinrm>=0.3.0" didn't work for me on my Mac with the M1 chip
+- pip3 install "pywinrm>=0.3.0" did work for me
 
+### Using NTLM Authentication with Ansible
+- Instead of using Basic Authentication I'm opting to use NTLM since Basic is clear-text authentication
+- I found the following site to help understand how to setup WinRM to do NTLM auth: https://docs.ansible.com/ansible/latest/user_guide/windows_setup.html
+- On the site above, I'm on the section titled "WinRM Setup"
+- Open PowerShell ISE as Administrator on the Windows VM we have running in Azure.  In ISE I'm inputting the script shown below from site above.
+```  [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+$url = "https://raw.githubusercontent.com/ansible/ansible/devel/examples/scripts/ConfigureRemotingForAnsible.ps1"
+$file = "$env:temp\ConfigureRemotingForAnsible.ps1"
+
+(New-Object -TypeName System.Net.WebClient).DownloadFile($url, $file)
+
+powershell.exe -ExecutionPolicy ByPass -File $file 
+```
+-
