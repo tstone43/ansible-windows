@@ -1,11 +1,5 @@
 # ansible-windows
 
-## Ansible Controller on Mac to Configure Windows
-
-### Setup Mac to be Ansible controller
-- open Terminal on Mac
-- brew install ansible
-
 ### Setup Win 2019 Datacenter server in Azure
 - open https://portal.azure.com
 - Create a Resource
@@ -13,7 +7,8 @@
 - Suggestions during VM creation
   - Create a new resource group, calling mine ansible-lab
   - Create a small data disk on the VM
-  - Configure RDP network security group after VM creation to allow just your Public IP
+  - Configure network security group (NSG) with incoming RDP rule after VM creation to allow just your Public IP as source address
+  - Configure NSG to allow incoming WinRM HTTPS communication port 5986 and allow just your Public IP as source address
 
 ### Installing Ansible and PyWinRM on Debian Linux (Ansible controller)
 - pip install ansible
