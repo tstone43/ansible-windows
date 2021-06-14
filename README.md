@@ -10,6 +10,9 @@
 - open https://portal.azure.com
 - Create a Resource
 - Choose Windows Server 2019 Datacenter
-- For further detail consult Internet
+- Suggestions during VM creation
+  - Create a new resource group, calling mine ansible-lab
+  - Create a small data disk on the VM
+  - Configure RDP network security group after VM creation to allow just your Public IP
 
 
