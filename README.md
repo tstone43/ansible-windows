@@ -53,8 +53,14 @@ ansible_port=5986
 ansible_winrm_transport=ntlm
 ansible_winrm_server_cert_validation=ignore
 ```
-- Run win_ping now to make sure you Ansible can connect to your Windows host
+- Run win_ping now to make sure Ansible can connect to your Windows host.  Note you should receive "SUCCESS" in output.
+- Note that inputting the password in the inventory file like I did above is only for testing.  Use Ansible Vault to encrypt secret values in config files.
+
 ```ansible windows -m win_ping```
+
+### Cloning this Repo to my Linux Host
+- I want to clone this repo now to my Linux host, so I can start building some Ansible playbooks for Windows
+- 
 
 
 
