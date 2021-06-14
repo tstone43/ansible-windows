@@ -42,7 +42,8 @@ powershell.exe -ExecutionPolicy ByPass -File $file
 ```sudo nano /etc/ansible/hosts```
 
 - In the above file you will input the following:
-```[windows]
+```
+[windows]
 {public IP address of Windows host goes here}
 
 [windows:vars]
