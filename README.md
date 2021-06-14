@@ -33,4 +33,8 @@ $file = "$env:temp\ConfigureRemotingForAnsible.ps1"
 
 powershell.exe -ExecutionPolicy ByPass -File $file 
 ```
--
+- Next we should enumerate our WinRM listener on our Windows server, so we can see that our HTTPS listener i setup
+
+```winrm enumerate winrm/config/Listener```
+
+
