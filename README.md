@@ -65,6 +65,12 @@ ansible_winrm_server_cert_validation=ignore
 
 ```git clone https://github.com/tstone43/ansible-windows.git```
 
+- After cloning the repo, I create a new folder called "win_updates" in my repo
+- Under this new folder, I create a playbook.yml file that contains a play to run Windows Updates on my Windows host.
+- I run the following command to execute the Windows Update playbook against my Windows host:
+
+```ansible-playbook playbook.yml```
+- I remote into the Windows server and see that the server installed Windows Updates...Success!
 
 
 
