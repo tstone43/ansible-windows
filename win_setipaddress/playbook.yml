@@ -1,0 +1,13 @@
+---
+- hosts: windows
+
+  tasks:
+  - name: Set up static IP address
+    win_shell: "Get-NetIpAddress -InterfaceAlias 'Ethernet 2' | New-NetIpAddress -IpAddress 10.0.0.4 -PrefixLength 24 -DefaultGateway 10.0.0.1"
+    async: 100 # Using "fire-and-forget" asynchronous execution for this task, otherwise it will always fail and timeout
+    poll: 0
+
+  - name: Set DNS address on Ethernet 2
+    win_dns_client:
+      adapter_names: Ethernet 2
+      ipv4_addresses: 10.0.0.4
