@@ -59,7 +59,7 @@ ansible_winrm_server_cert_validation=ignore
 
 ```ansible windows -m win_ping```
 
-### Cloning this Repo to my Linux Host
+### Cloning Repo, Running Windows Updates, and Renaming Windows Host
 - I want to clone this repo now to my Linux host, so I can start building some Ansible playbooks for Windows
 - In Linux terminal run the following.  I would of course recommend using your own Git repository, so you can make changes easily.
 
@@ -75,6 +75,24 @@ ansible_winrm_server_cert_validation=ignore
 - Next I create a new directory in this repo called "win_hostname"
 - I switch into this directory and I create a playbook.yml
 - This playbook.yml file will rename the host since I'm planning on making it a Domain Controler
+
+```ansible-playbook playbook.yml```
+
+### Configuring Network Interface with Static IP
+- Next I'm going into https://portal.azure.com and going to the Network Interface settings for my Windows VM
+- I'm configuring the Network Interface to use a Static address instead of Dynamic in the Azure portal since this is a Domain Controller
+- We still need to configure the IP address to be Static on the Windows Server
+- There doesn't appear to be a module to set a static IP for a NIC in Ansible, so I'm going to try this using a PowerShell script I found: https://www.pdq.com/blog/using-powershell-to-set-static-and-dhcp-ip-addresses-part-1/ 
+
+### Configuring Windows Server as Domain Controller
+- Going to try the Ansible module called "ansible.windows.win_domain_controller"
+- The above collection needs to be installed on the Linux host with this command:
+
+```ansible-galaxy collection install ansible.windows```
+
+
+
+
 
 
 
