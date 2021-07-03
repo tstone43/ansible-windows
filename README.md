@@ -83,6 +83,13 @@ ansible_winrm_server_cert_validation=ignore
 - I'm configuring the Network Interface to use a Static address instead of Dynamic in the Azure portal since this is a Domain Controller
 - We still need to configure the IP address to be Static on the Windows Server
 - There doesn't appear to be a module to set a static IP for a NIC in Ansible, so I'm going to try this using a PowerShell script I found: https://www.pdq.com/blog/using-powershell-to-set-static-and-dhcp-ip-addresses-part-1/ 
+- A multi-line PowerShell script is being run to set the IP Address and Default Gateway
+- Notice this multi-line script has "async: 100" configured otherwise timeout error occurs when running playbook
+- To determine facts about Windows host I'm running this command:
+
+```ansible windows -m setup```
+- I am able to retrieve the name of the connection for the first interface by using this fact: {{ansible_interfaces[0].connection_name}}
+- I am using the fact directly above to set DNS IP Address for the connection name, e.g., my connection name on Windows is "Ethernet 2"
 
 ### Configuring Windows Server as Domain Controller
 - Going to try the Ansible module called "ansible.windows.win_domain_controller"

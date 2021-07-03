@@ -2,11 +2,38 @@
 - hosts: windows
 
   tasks:
-  - name: Copying PowerShell script to server
-    win_copy:
-      src: /home/parallels/ansible-windows/win_setipaddress/Set-IPWinServer.ps1
-      dest: C:\Users\sysadmin\AppData\Local\Temp\Set-IPWinServer.ps1
-  - name: Set DNS address on Ethernet 2 # Want to see if I can use Ansible to find active network interface
-    win_dns_client:
-      adapter_names: Ethernet 2
-      ipv4_addresses: 10.0.0.4
+    - name: Show connection name that will be configured with DNS IP address
+      debug:
+        msg: "{{ansible_interfaces[0].connection_name}}"
+    - name: Set DNS address on first interface
+      win_dns_client:
+        adapter_names: "{{ansible_interfaces[0].connection_name}}"
+        ipv4_addresses: 10.0.0.4
+    - name: Run script to set IP Address
+      ansible.windows.win_shell: |
+        $IPType = "IPv4"
+        $IP = "10.0.0.4"
+        $MaskBits = 24
+        $Gateway = "10.0.0.1"
+        # Retrieve network adapter where status is Up
+        $adapter = Get-NetAdapter | Where-Object {$_.Status -eq "up"}
+        # Retrieve interface with IPv4 type
+        $interface = $adapter | Get-NetIPInterface -AddressFamily $IPType
+        # Check to see if adapter is set to 10.0.0.4 or if DHCP is enabled, if either conditions are met then remove IP from adapter
+        If (($adapter | Get-NetIPConfiguration).IPv4Address.IPAddress -ne "10.0.0.4" -or ($interface.Dhcp -eq "Enabled")) {
+        $adapter | Remove-NetIPAddress -AddressFamily $IPType -Confirm:$false
+        }
+        # Check to see if adapters default gateway is 10.0.0.1 and if not then remove current default gateway
+        If (($adapter | Get-NetIPConfiguration).Ipv4DefaultGateway.NextHop -ne "10.0.0.1") {
+        $adapter | Remove-NetRoute -AddressFamily $IPType -Confirm:$false
+        }
+        # Checking once more if IP address is not set to 10.0.0.4 if so then configure adapter with static IP, default gateway
+        If (($adapter | Get-NetIPConfiguration).IPv4Address.IPAddress -ne "10.0.0.4") {
+        # Configure the IP address and default gateway
+        $adapter | New-NetIPAddress `
+        -AddressFamily $IPType `
+        -IPAddress $IP `
+        -PrefixLength $MaskBits `
+        -DefaultGateway $Gateway
+        }
+      async: 100 # Using async execution otherwise timeout error will occur
