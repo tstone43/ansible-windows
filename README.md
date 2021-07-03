@@ -84,6 +84,10 @@ ansible_winrm_server_cert_validation=ignore
 - We still need to configure the IP address to be Static on the Windows Server
 - There doesn't appear to be a module to set a static IP for a NIC in Ansible, so I'm going to try this using a PowerShell script I found: https://www.pdq.com/blog/using-powershell-to-set-static-and-dhcp-ip-addresses-part-1/ 
 - A multi-line PowerShell script is being run to set the IP Address and Default Gateway
+- Note there is a bug in Ansible if you have apostrophe in any comments in your multi-line script you will get an odd error
+- A great way to debug your multi-line script is to run the playbook like this:
+
+```ansible-playbook playbook.yml -vvv```
 - Notice this multi-line script has "async: 100" configured otherwise timeout error occurs when running playbook
 - To determine facts about Windows host I'm running this command:
 
