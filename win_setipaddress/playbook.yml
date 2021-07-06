@@ -1,6 +1,14 @@
 ---
 - hosts: windows
 
+  vars_prompt:
+    - name: ip_address
+      prompt: "Enter the IP Address to use for Domain Controller"
+      private: no
+    - name: gateway_ip_address
+      prompt: "Enter the default gateway IP address"
+      private: no
+
   tasks:
     - name: Show connection name that will be configured with DNS IP address
       debug:
@@ -8,27 +16,27 @@
     - name: Set DNS address on first interface
       win_dns_client:
         adapter_names: "{{ansible_interfaces[0].connection_name}}"
-        ipv4_addresses: 10.0.0.4
+        ipv4_addresses: "{{ ip_address }}"
     - name: Run script to set IP Address
       ansible.windows.win_shell: |
         $IPType = "IPv4"
-        $IP = "10.0.0.4"
+        $IP = "{{ ip_address }}"
         $MaskBits = 24
-        $Gateway = "10.0.0.1"
+        $Gateway = "{{ gateway_ip_address }}"
         # Retrieve network adapter where status is Up
         $adapter = Get-NetAdapter | Where-Object {$_.Status -eq "up"}
         # Retrieve interface with IPv4 type
         $interface = $adapter | Get-NetIPInterface -AddressFamily $IPType
-        # Check to see if adapter is set to 10.0.0.4 or if DHCP is enabled, if either conditions are met then remove IP from adapter
-        If (($adapter | Get-NetIPConfiguration).IPv4Address.IPAddress -ne "10.0.0.4" -or ($interface.Dhcp -eq "Enabled")) {
+        # Check to see if adapter is set to wanted IP address or if DHCP is enabled, if either conditions are met then remove IP from adapter
+        If (($adapter | Get-NetIPConfiguration).IPv4Address.IPAddress -ne $IP -or ($interface.Dhcp -eq "Enabled")) {
         $adapter | Remove-NetIPAddress -AddressFamily $IPType -Confirm:$false
         }
-        # Check to see if adapters default gateway is 10.0.0.1 and if not then remove current default gateway
-        If (($adapter | Get-NetIPConfiguration).Ipv4DefaultGateway.NextHop -ne "10.0.0.1") {
+        # Check to see if adapters default gateway is wanted IP address and if not then remove current default gateway
+        If (($adapter | Get-NetIPConfiguration).Ipv4DefaultGateway.NextHop -ne $Gateway) {
         $adapter | Remove-NetRoute -AddressFamily $IPType -Confirm:$false
         }
-        # Checking once more if IP address is not set to 10.0.0.4 if so then configure adapter with static IP, default gateway
-        If (($adapter | Get-NetIPConfiguration).IPv4Address.IPAddress -ne "10.0.0.4") {
+        # Checking once more if IP address is not set to wanted IP address if so then configure adapter with static IP, default gateway
+        If (($adapter | Get-NetIPConfiguration).IPv4Address.IPAddress -ne $IP) {
         # Configure the IP address and default gateway
         $adapter | New-NetIPAddress `
         -AddressFamily $IPType `

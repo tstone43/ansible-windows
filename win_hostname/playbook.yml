@@ -1,10 +1,15 @@
 ---
 - hosts: windows
 
+  vars_prompt:
+    - name: host_name
+      prompt: "Enter hostname that you would like to change to"
+      private: no
+
   tasks:
-  - name: Change hostname to ansible-dc
+  - name: Change hostname to new name
     ansible.windows.win_hostname:
-      name: ansible-dc
+      name: "{{ host_name }}"
     register: res
 
   - name: Reboot
