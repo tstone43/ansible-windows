@@ -1,0 +1,30 @@
+---
+- hosts: windows
+
+  vars_prompt:
+    - name: domain_admin_user
+      prompt: "Enter username that will promote this domain controller"
+      private: no
+    - name: domain_admin_password
+      prompt: "Enter password for user that will promote this domain controller"
+      private: yes
+    - name: safe_mode_password
+      prompt: "Enter password to be used for Directory Services Restore Mode"
+      private: yes
+
+  tasks:
+    - name: Promote domain controller
+      ansible.windows.win_domain_controller:
+        dns_domain_name: ansiblelab.local
+        domain_admin_user: "{{ domain_admin_user }}"
+        domain_admin_password: "{{ domain_admin_password }}"
+        safe_mode_password: "{{ safe_mode_password }}"
+        state: domain_controller
+        install_dns: yes
+      register: dc_promotion
+
+    - name: Reboot after promotion
+      ansible.windows.win_reboot:
+      when: dc_promotion.reboot_required
+
+

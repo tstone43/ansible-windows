@@ -1,0 +1,31 @@
+---
+- hosts: windows
+
+  vars_prompt:
+    - name: domain_name
+      prompt: "Enter FQDN for new domain name"
+      private: no
+    - name: domain_netbios_name
+      prompt: "Enter NetBIOS name for new domain"
+      private: no
+    - name: safe_mode_password
+      prompt: "Enter Directory Service Restore Mode password"
+      private: yes
+
+  tasks:
+    - name: Create new Windows domain in a new forest with specific parameters
+      ansible.windows.win_domain:
+        create_dns_delegation: no
+        database_path: C:\Windows\NTDS
+        dns_domain_name: "{{ domain_name }}"
+        domain_mode: WinThreshold
+        domain_netbios_name: "{{ domain_netbios_name }}"
+        install_dns: yes
+        forest_mode: WinThreshold
+        safe_mode_password: "{{ safe_mode_password }}"
+        sysvol_path: C:\Windows\SYSVOL
+      register: domain_install
+
+    - name: Reboot after domain install
+      ansible.windows.win_reboot:
+      when: domain_install.reboot_required

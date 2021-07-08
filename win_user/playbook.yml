@@ -1,0 +1,15 @@
+---
+- hosts: windows
+
+  vars_prompt:
+    - name: local_admin_password
+      prompt: "Enter password to set for local admin"
+      private: yes
+
+  tasks:
+    - name: Ensure administrator is enabled
+      ansible.windows.win_user:
+        name: administrator
+        password: "{{ local_admin_password }}"
+        password_never_expires: true
+        state: present

@@ -70,13 +70,15 @@ ansible_winrm_server_cert_validation=ignore
 - I run the following command to execute the Windows Update playbook against my Windows host:
 
 ```ansible-playbook playbook.yml```
-- I remote into the Windows server and see that the server installed Windows Updates...Success!
-
+- I remote into the Windows server and see that the server installed Windows Updates.  I'm noticing the Cumulative Update for Windows didn't install.  Might have to review further.
 - Next I create a new directory in this repo called "win_hostname"
 - I switch into this directory and I create a playbook.yml
 - This playbook.yml file will rename the host since I'm planning on making it a Domain Controler
 
 ```ansible-playbook playbook.yml```
+- If you want to verify hostname change you can run this command from Ansible host:
+
+```ansible windows -m ansible.windows.win_command -a "hostname"```
 
 ### Configuring Network Interface with Static IP
 - Next I'm going into https://portal.azure.com and going to the Network Interface settings for my Windows VM
@@ -94,12 +96,27 @@ ansible_winrm_server_cert_validation=ignore
 ```ansible windows -m setup```
 - I am able to retrieve the name of the connection for the first interface by using this fact: {{ansible_interfaces[0].connection_name}}
 - I am using the fact directly above to set DNS IP Address for the connection name, e.g., my connection name on Windows is "Ethernet 2"
+- To verify that this playbook worked you can run this on Ansible host:
+
+```ansible windows -m ansible.windows.win_command -a "ipconfig /all"```
+
+### Local Administrator on Windows Host Needs Password
+- Found that when using ansible.windows.win_domain that I can't create domain
+- The reason being because the local admin becomes domain admin and needs strong password
+- Require playbook to enable local admin and configure password
+- Created folder called "win_user"
+- Switched into this directory then created a playbook with ansible.windows.win_user module
+- Straightforward to set the password for existing local admin user with this module
 
 ### Configuring Windows Server as Domain Controller
-- Going to try the Ansible module called "ansible.windows.win_domain_controller"
 - The above collection needs to be installed on the Linux host with this command:
 
 ```ansible-galaxy collection install ansible.windows```
+- Going to try the Ansible module called "ansible.windows.win_domain_controller"
+- Next creating a folder called win_domain_controller and switching there to start building playbook
+- Built out the playbook in win_domain_controller, but found that this module requires an existence of a Windows domain to work
+- Discovered another module called ansible.windows.win_domain
+- 
 
 
 

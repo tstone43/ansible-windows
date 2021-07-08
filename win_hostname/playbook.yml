@@ -3,7 +3,7 @@
 
   vars_prompt:
     - name: host_name
-      prompt: "Enter hostname that you would like to change to"
+      prompt: "Enter hostname that you would like to use"
       private: no
 
   tasks:
