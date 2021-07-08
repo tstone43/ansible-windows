@@ -59,7 +59,11 @@ ansible_winrm_server_cert_validation=ignore
 
 ```ansible windows -m win_ping```
 
-### Cloning Repo, Running Windows Updates, and Renaming Windows Host
+### Installing Necessary Collection, Cloning Git Repo, Running Windows Updates, and Renaming Windows Host
+- To use most Windows modules in Ansible you are required to install a Collection
+- The Collection can be installed on the Ansible host with this command:
+
+```ansible-galaxy collection install ansible.windows```
 - I want to clone this repo now to my Linux host, so I can start building some Ansible playbooks for Windows
 - In Linux terminal run the following.  I would of course recommend using your own Git repository, so you can make changes easily.
 
@@ -108,15 +112,17 @@ ansible_winrm_server_cert_validation=ignore
 - Switched into this directory then created a playbook with ansible.windows.win_user module
 - Straightforward to set the password for existing local admin user with this module
 
-### Configuring Windows Server as Domain Controller
-- The above collection needs to be installed on the Linux host with this command:
-
-```ansible-galaxy collection install ansible.windows```
+### Configuring Windows Server as First Domain Controller
 - Going to try the Ansible module called "ansible.windows.win_domain_controller"
 - Next creating a folder called win_domain_controller and switching there to start building playbook
 - Built out the playbook in win_domain_controller, but found that this module requires an existence of a Windows domain to work
 - Discovered another module called ansible.windows.win_domain
-- 
+- Created folder "win_domain" and then created playbook within folder
+- Found it was also straightforward to use this module
+- Conclusion in regards to setting up first domain controller with Ansible is that "win_domain" module is the answer
+- The "win_domain_controller" module should be used to add an additional domain controller to an existing domain
+
+### Running Each Playbook Sequentially
 
 
 
