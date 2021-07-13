@@ -135,7 +135,7 @@ ansible_winrm_server_cert_validation=ignore
   - An enabled local admin with the password of your choosing
   - A new domain, AKA, a new domain controller in a new forest
 - Last thing to note I excluded 2 playbooks that I created in this repo from site.yml:
-  - win_updates: found that this work unreliably, will need more testing
+  - win_updates: found that this worked unreliably, will need more testing
   - win_domain_controller: this is not necessary since we're not adding a domain controller to an existing domain
 
 
