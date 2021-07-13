@@ -123,6 +123,17 @@ ansible_winrm_server_cert_validation=ignore
 - The "win_domain_controller" module should be used to add an additional domain controller to an existing domain
 
 ### Running Each Playbook Sequentially
+- After running each playbook individually and confirming functionality I wanted to be able to call each playbook through one file
+- At the root of this project I created a "site.yml" file.
+- Notice in the site.yml file it is importing every necessary playbook.
+- To use the site.yml file all you need to do is run this command:
+
+```ansible-playbook site.yml```
+- After doing so you should have a server with the following:
+  - Static IP address of your choosing
+  - Hostname of your choosing
+  - An enabled local admin with the password of your choosing
+  - A new domain, AKA, a new domain controller in a new forest
 
 
 

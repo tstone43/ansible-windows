@@ -1,0 +1,12 @@
+---
+- name: '[windows] Set Server to Use Static IP Address'
+  import_playbook: ./win_setipaddress/playbook.yml
+
+- name: '[windows] Set Hostname for Server'
+  import_playbook: ./win_hostname/playbook.yml
+
+- name: '[windows] Enable Local Admin Account'
+  import_playbook: ./win_user/playbook.yml
+
+- name: '[windows] Create First Domain Controller in New Forest'
+  import_playbook: ./win_domain/playbook.yml
