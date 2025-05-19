@@ -9,3 +9,4 @@
       - SecurityUpdates
       - UpdateRollups
       reboot: yes
+      reboot_timeout: 3600
