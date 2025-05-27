@@ -1,0 +1,8 @@
+---
+- name: Upgrade all applications using winget
+  hosts: windows
+  gather_facts: no
+
+  tasks:
+    - name: Run winget upgrade --all
+      ansible.windows.win_command: winget upgrade --all --accept-source-agreements --accept-package-agreements
